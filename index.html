@@ -544,9 +544,7 @@ async function checkHealth() {
   const pill = document.getElementById("statusPill");
 
   try {
-    const res = await fetch(`${API_BASE}/health`, {
-      signal: AbortSignal.timeout(15000)
-    });
+    const res = await fetch(`${API_BASE}/health`);
 
     if (!res.ok) throw new Error();
 
@@ -557,8 +555,6 @@ async function checkHealth() {
 
     pill.textContent = "● waking backend...";
     pill.className = "status-pill offline";
-
-    setTimeout(checkHealth, 5000);
   }
 }
 checkHealth();
