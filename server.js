@@ -353,7 +353,7 @@ app.post("/ask", async (req, res) => {
       model: "openai/gpt-oss-20b:free",
       messages: [
         { role: "system", content: SYSTEM_PROMPTS[mode] || SYSTEM_PROMPTS.developer },
-        { role: "user", content: buildAnalyzePrompt(ctx, question) },
+        { role: "user", content: buildAskPrompt(ctx, question) },
       ],
       temperature: 0.4,
       max_tokens: mode === "interview" ? 700 : 1000,
@@ -398,7 +398,7 @@ app.post("/file", async (req, res) => {
       model: "openai/gpt-oss-20b:free",
       messages: [
         { role: "system", content: SYSTEM_PROMPTS[mode] || SYSTEM_PROMPTS.developer },
-        { role: "user", content: buildAnalyzePrompt(ctx, filepath, fileContent, mode) },
+        { role: "user", content: buildFilePrompt(ctx, filepath, fileContent, mode) },
       ],
       temperature: 0.4,
       max_tokens: mode === "interview" ? 700 : 1000,
