@@ -27,7 +27,6 @@ app.use(cors({
 app.use(express.json({
   limit: "1mb"
 }));
-console.error(err);
 dotenv.config();
 
 const openai = new OpenAI({
