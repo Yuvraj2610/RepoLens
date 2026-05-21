@@ -509,7 +509,7 @@ app.get("/health", (_req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`\n✅ RepoLens backend → http://localhost:${PORT}`);
+  console.log(`\n✅ RepoLens backend → https://repolens-2p07.onrender.com`);
   console.log(`   POST /analyze   — full repo analysis`);
   console.log(`   POST /ask       — follow-up questions`);
   console.log(`   POST /file      — explain a specific file`);
