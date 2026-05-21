@@ -4,8 +4,6 @@ import dotenv from "dotenv";
 import OpenAI from "openai";
 import rateLimit from "express-rate-limit";
 
-dotenv.config();
-
 const app = express();
 
 const limiter = rateLimit({
@@ -21,7 +19,7 @@ app.use("/ask", limiter);
 app.use("/file", limiter);
 app.use(cors({
   origin: [
-    "https://your-vercel-domain.vercel.app"
+    "https://repo-lens-tau.vercel.app"
   ]
 }));
 app.use(express.json({
@@ -355,7 +353,7 @@ app.post("/ask", async (req, res) => {
       model: "openai/gpt-oss-20b:free",
       messages: [
         { role: "system", content: SYSTEM_PROMPTS[mode] || SYSTEM_PROMPTS.developer },
-        { role: "user", content: buildAnalyzePrompt(ctx, mode) },
+        { role: "user", content: buildAnalyzePrompt(ctx, question) },
       ],
       temperature: 0.4,
       max_tokens: mode === "interview" ? 700 : 1000,
@@ -400,7 +398,7 @@ app.post("/file", async (req, res) => {
       model: "openai/gpt-oss-20b:free",
       messages: [
         { role: "system", content: SYSTEM_PROMPTS[mode] || SYSTEM_PROMPTS.developer },
-        { role: "user", content: buildAnalyzePrompt(ctx, mode) },
+        { role: "user", content: buildAnalyzePrompt(ctx, filepath, fileContent, mode) },
       ],
       temperature: 0.4,
       max_tokens: mode === "interview" ? 700 : 1000,
