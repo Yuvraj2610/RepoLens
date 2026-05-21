@@ -320,8 +320,12 @@ app.post("/analyze", async (req, res) => {
     const raw = completion.choices[0].message.content || "";
     let analysis;
     try {
-      const clean = raw.replace(/```json|```/g, "").trim();
-      analysis = JSON.parse(clean.match(/\{[\s\S]*\}/)?.[0] ?? clean);
+      const clean = raw
+      .replace(/```json/g, "")
+      .replace(/```/g, "")
+      .trim();
+    
+    analysis = JSON.parse(clean);      
     } catch (_) {
       return res.json({ raw }); // graceful fallback
     }
@@ -417,7 +421,21 @@ app.post("/file", async (req, res) => {
       const clean = raw.replace(/```json|```/g, "").trim();
       fileAnalysis = JSON.parse(clean.match(/\{[\s\S]*\}/)?.[0] ?? clean);
     } catch (_) {
-      return res.json({ raw });
+      return res.json({
+        analysis: {
+          repoName: ctx.name,
+          description: ctx.description,
+          language: ctx.language,
+          stars: String(ctx.stars),
+          summary: "AI formatting issue occurred.",
+          whatItDoes: raw.slice(0, 1200),
+          techStack: {},
+          howToRun: "Check repository README.",
+          folderExplanation: ctx.tree,
+          keyInsights: [],
+          interviewQuestions: []
+        }
+      });
     }
 
     res.json({ fileAnalysis });
