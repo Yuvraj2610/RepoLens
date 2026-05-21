@@ -500,7 +500,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--display);min-heigh
 
 <script>
 // ─── Config ────────────────────────────────────────────────
-const API_BASE = "http://localhost:3000";
+const API_BASE = "https://repolens-2p07.onrender.com";
 
 // ─── marked.js setup ───────────────────────────────────────
 marked.setOptions({
@@ -542,13 +542,23 @@ let askHistory = [];   // {q, a} pairs for display
 // ─── Health check ───────────────────────────────────────────
 async function checkHealth() {
   const pill = document.getElementById("statusPill");
+
   try {
-    const res = await fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(2000) });
-    if (res.ok) {
-      pill.textContent = "● online"; pill.className = "status-pill online";
-    } else throw 0;
+    const res = await fetch(`${API_BASE}/health`, {
+      signal: AbortSignal.timeout(15000)
+    });
+
+    if (!res.ok) throw new Error();
+
+    pill.textContent = "● online";
+    pill.className = "status-pill online";
+
   } catch {
-    pill.textContent = "● offline"; pill.className = "status-pill offline";
+
+    pill.textContent = "● waking backend...";
+    pill.className = "status-pill offline";
+
+    setTimeout(checkHealth, 5000);
   }
 }
 checkHealth();
